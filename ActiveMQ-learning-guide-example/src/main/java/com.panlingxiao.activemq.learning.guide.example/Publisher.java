@@ -29,11 +29,13 @@ public class Publisher {
     public static void main(String []args) throws JMSException {
 
         String user = env("ACTIVEMQ_USER", "admin");
-       // String password = env("ACTIVEMQ_PASSWORD", "password");
-        String password = env("ACTIVEMQ_PASSWORD", "admin");
+        String password = env("ACTIVEMQ_PASSWORD", "password");
+        //String password = env("ACTIVEMQ_PASSWORD", "admin");
         String host = env("ACTIVEMQ_HOST", "localhost");
+
         int port = Integer.parseInt(env("ACTIVEMQ_PORT", "61616"));
-        String destination = arg(args, 0, "event");
+
+        String destination = arg(args, 0, "event1");
 
         int messages = 10000;
         int size = 256;
