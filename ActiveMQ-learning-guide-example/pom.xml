@@ -11,9 +11,12 @@
 
     <groupId>com.panlingxiao.ActiveMQ-learning</groupId>
     <artifactId>ActiveMQ-learning-guide-example</artifactId>
+    <packaging>pom</packaging>
 
     <dependencies>
 
+
+        <!--
         <dependency>
             <groupId>org.apache.geronimo.specs</groupId>
             <artifactId>geronimo-jms_1.1_spec</artifactId>
@@ -25,7 +28,12 @@
             <artifactId>activemq-client</artifactId>
             <version>5.11.1</version>
         </dependency>
+        -->
 
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-all</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.slf4j</groupId>

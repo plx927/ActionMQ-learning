@@ -46,18 +46,46 @@ public class Publisher {
             body += DATA.charAt(i%DATA.length());
         }
 
-        ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory("tcp://" + host + ":" + port);
+        //创建JMS规范中所定义的ConncectionFactory
+        ConnectionFactory factory = new ActiveMQConnectionFactory("tcp://" + host + ":" + port);
 
-        Connection connection = factory.createConnection(user, password);
+        /*
+         * 通过ConnectionFactory创建Connection
+         * 在默认情况下，ActiveMQ并没有指定连接时需要用户名和密码来进行连接
+         * 如果希望使用用户标识，在需要对ActiveMQ的安全机制进行配置
+         */
+        Connection connection = factory.createConnection();
+        //Connection connection = factory.createConnection(user, password);
+
+        //
         connection.start();
+
+        /*
+         * JMS的Session是建立在Connnection之上的，需要通过Connection来创建Session，
+         * 并且设置Session为确认机制
+         */
         Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+
+        /*
+         * Destination为消息发送的目的地
+         * 在JMS规范中，Destination有两个子接口，分别为Queue和Topic
+         * 这里创建的消息发送目的地为Topic，并且指定了Topic的名字
+         */
         Destination dest = new ActiveMQTopic(destination);
+
+        // 通过Session创建指定目的地的消息生产者，通过Producer来发送消息
+        // 也可以通过创建指定目的地的消息消费者
         MessageProducer producer = session.createProducer(dest);
+
+        //设置消息生产者发送消息的发送模式，为非持久化方式
         producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
 
+
         for( int i=1; i <= messages; i ++) {
+            //通过Session来创建文本消息
             TextMessage msg = session.createTextMessage(body);
             msg.setIntProperty("id", i);
+            //使用消息的发送者来发送消息
             producer.send(msg);
             if( (i % 1000) == 0) {
                 System.out.println(String.format("Sent %d messages", i));
