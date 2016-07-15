@@ -22,7 +22,7 @@ import org.apache.activemq.command.ActiveMQTopic;
 import javax.jms.*;
 
 /**
- * ¹Ù·½Àı×Ó
+ * å®˜æ–¹ä¾‹å­
  */
 public class Publisher {
 
@@ -35,7 +35,7 @@ public class Publisher {
 
         int port = Integer.parseInt(env("ACTIVEMQ_PORT", "61616"));
 
-        String destination = arg(args, 0, "event1");
+        String destination = arg(args, 0, "event");
 
         int messages = 10000;
         int size = 256;
@@ -46,13 +46,13 @@ public class Publisher {
             body += DATA.charAt(i%DATA.length());
         }
 
-        //´´½¨JMS¹æ·¶ÖĞËù¶¨ÒåµÄConncectionFactory
+        //åˆ›å»ºJMSè§„èŒƒä¸­æ‰€å®šä¹‰çš„ConncectionFactory
         ConnectionFactory factory = new ActiveMQConnectionFactory("tcp://" + host + ":" + port);
 
         /*
-         * Í¨¹ıConnectionFactory´´½¨Connection
-         * ÔÚÄ¬ÈÏÇé¿öÏÂ£¬ActiveMQ²¢Ã»ÓĞÖ¸¶¨Á¬½ÓÊ±ĞèÒªÓÃ»§ÃûºÍÃÜÂëÀ´½øĞĞÁ¬½Ó
-         * Èç¹ûÏ£ÍûÊ¹ÓÃÓÃ»§±êÊ¶£¬ÔÚĞèÒª¶ÔActiveMQµÄ°²È«»úÖÆ½øĞĞÅäÖÃ
+         * é€šè¿‡ConnectionFactoryåˆ›å»ºConnection
+         * åœ¨é»˜è®¤æƒ…å†µä¸‹ï¼ŒActiveMQå¹¶æ²¡æœ‰æŒ‡å®šè¿æ¥æ—¶éœ€è¦ç”¨æˆ·åå’Œå¯†ç æ¥è¿›è¡Œè¿æ¥
+         * å¦‚æœå¸Œæœ›ä½¿ç”¨ç”¨æˆ·æ ‡è¯†ï¼Œåœ¨éœ€è¦å¯¹ActiveMQçš„å®‰å…¨æœºåˆ¶è¿›è¡Œé…ç½®
          */
         Connection connection = factory.createConnection();
         //Connection connection = factory.createConnection(user, password);
@@ -61,31 +61,39 @@ public class Publisher {
         connection.start();
 
         /*
-         * JMSµÄSessionÊÇ½¨Á¢ÔÚConnnectionÖ®ÉÏµÄ£¬ĞèÒªÍ¨¹ıConnectionÀ´´´½¨Session£¬
-         * ²¢ÇÒÉèÖÃSessionÎªÈ·ÈÏ»úÖÆ
+         * JMSçš„Sessionæ˜¯å»ºç«‹åœ¨Connnectionä¹‹ä¸Šçš„ï¼Œéœ€è¦é€šè¿‡Connectionæ¥åˆ›å»ºSessionï¼Œ
+         * å¹¶ä¸”è®¾ç½®Sessionä¸ºç¡®è®¤æœºåˆ¶
          */
         Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
         /*
-         * DestinationÎªÏûÏ¢·¢ËÍµÄÄ¿µÄµØ
-         * ÔÚJMS¹æ·¶ÖĞ£¬DestinationÓĞÁ½¸ö×Ó½Ó¿Ú£¬·Ö±ğÎªQueueºÍTopic
-         * ÕâÀï´´½¨µÄÏûÏ¢·¢ËÍÄ¿µÄµØÎªTopic£¬²¢ÇÒÖ¸¶¨ÁËTopicµÄÃû×Ö
+         * Destinationä¸ºæ¶ˆæ¯å‘é€çš„ç›®çš„åœ°
+         * åœ¨JMSè§„èŒƒä¸­ï¼ŒDestinationæœ‰ä¸¤ä¸ªå­æ¥å£ï¼Œåˆ†åˆ«ä¸ºQueueå’ŒTopic
+         * è¿™é‡Œåˆ›å»ºçš„æ¶ˆæ¯å‘é€ç›®çš„åœ°ä¸ºTopicï¼Œå¹¶ä¸”æŒ‡å®šäº†Topicçš„åå­—
          */
         Destination dest = new ActiveMQTopic(destination);
 
-        // Í¨¹ıSession´´½¨Ö¸¶¨Ä¿µÄµØµÄÏûÏ¢Éú²úÕß£¬Í¨¹ıProducerÀ´·¢ËÍÏûÏ¢
-        // Ò²¿ÉÒÔÍ¨¹ı´´½¨Ö¸¶¨Ä¿µÄµØµÄÏûÏ¢Ïû·ÑÕß
+        // é€šè¿‡Sessionåˆ›å»ºæŒ‡å®šç›®çš„åœ°çš„æ¶ˆæ¯ç”Ÿäº§è€…(Producer)ï¼Œé€šè¿‡Produceræ¥å‘é€æ¶ˆæ¯
+        // é€šè¿‡MessageProduceræ¥åˆ›å»ºå’Œå‘é€æ¶ˆæ¯
+
+        // ä¹Ÿå¯ä»¥é€šè¿‡åˆ›å»ºæŒ‡å®šç›®çš„åœ°çš„æ¶ˆæ¯æ¶ˆè´¹è€…ï¼ˆConsumer),é€šè¿‡Consumeræ¥æ¥å—å’Œå¤„ç†æ¶ˆæ¯
         MessageProducer producer = session.createProducer(dest);
 
-        //ÉèÖÃÏûÏ¢Éú²úÕß·¢ËÍÏûÏ¢µÄ·¢ËÍÄ£Ê½£¬Îª·Ç³Ö¾Ã»¯·½Ê½
+
+        //è®¾ç½®æ¶ˆæ¯ç”Ÿäº§è€…å‘é€æ¶ˆæ¯çš„å‘é€æ¨¡å¼ï¼Œä¸ºéæŒä¹…åŒ–æ–¹å¼
         producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
 
 
         for( int i=1; i <= messages; i ++) {
-            //Í¨¹ıSessionÀ´´´½¨ÎÄ±¾ÏûÏ¢
+            //é€šè¿‡Sessionæ¥åˆ›å»ºæ–‡æœ¬æ¶ˆæ¯
             TextMessage msg = session.createTextMessage(body);
+
+            //JMSæ¶ˆæ¯ä¼šè‡ªåŠ¨å°†Destinationè®¾ç½®åˆ°Messageçš„Headerä¸­
+            System.out.println(msg.getJMSDestination());
+
+
             msg.setIntProperty("id", i);
-            //Ê¹ÓÃÏûÏ¢µÄ·¢ËÍÕßÀ´·¢ËÍÏûÏ¢
+            //ä½¿ç”¨æ¶ˆæ¯çš„å‘é€è€…æ¥å‘é€æ¶ˆæ¯
             producer.send(msg);
             if( (i % 1000) == 0) {
                 System.out.println(String.format("Sent %d messages", i));
