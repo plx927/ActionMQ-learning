@@ -28,11 +28,23 @@ Session.createMessageConsumer(destination);
 JMS消息是JMS规范中最为重要的概念，它就是被JMS客户端所发送和接收的对象。
 
 #### JMS Domain
+JMS的对于消息机制规范的定义借鉴了已经存在的消息机制的实现，它定了两种消息机制(在JMS规范中，也被称为domain)。
 两种发送消息的方式,分别为点对点(Point-to-Point)和发布订阅(Publish/Subscribe)
+
+##### POINT-TO-POINT DOMAIN
+P2P消息域使用队列作为消息的目的地。
+
+##### PUBLISH/SUBSCRIBE DOMAIN
+
+
+A copy of each message on a given sdestination is delivered to all topic subscribers using the pub/sub domain.
+
 
 #### Administered Object
 
 #### Destination
+
+Topic/Queue
 
 
 #### JMS message internals
