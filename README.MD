@@ -23,28 +23,71 @@ Session.createMessageConsumer(destination);
 
 #### JMS Provider
 实现JMS接口的消息中间件，完全由Java语言所编写。
-
 #### JMS Message
 JMS消息是JMS规范中最为重要的概念，它就是被JMS客户端所发送和接收的对象。
 
 #### JMS Domain
-JMS的对于消息机制规范的定义借鉴了已经存在的消息机制的实现，它定了两种消息机制(在JMS规范中，也被称为domain)。
-两种发送消息的方式,分别为点对点(Point-to-Point)和发布订阅(Publish/Subscribe)
+JMS的消息机制规范借鉴了已经存在的消息机制的实现，它定义了两种消息机制(在JMS规范中，也被称为domain)；这两种发送消息的方式,分别为点对点(Point-to-Point)和发布订阅(Publish/Subscribe)
 
 ##### POINT-TO-POINT DOMAIN
-P2P消息域使用队列作为消息的目的地。
+P2P消息域使用队列作为消息的目的地。通过队列，消息可以被同步/异步发送或者接受。每一个在队列中被接受的消息只能被发送一次，并且只能被发送给一个消费者。
+P2P消息传送机制与通过邮件服务器发送私人邮件非常类似。消费者可以通过同步的方式从队列中获取消息(通过MessageConsumer.receive()完成)，或者通过注册一
+个MessageListener实现类以异步的方式从队列中接受消息。**队列会存储所有的消息直到它被消息者消费或者消息过期。**
+多个消费者可以注册到同一个队列中，但是队列中的每一条消息只能被一个消费者，具体取决于消息者对消息的确认机制。
+JMS的提供者确保了消息只会被发送一次，并且只有一个消费着可以消费到消息。就这一点而言，JMS提供者将消费分散以轮询的方式将消息发送给多个消费者。
 
 ##### PUBLISH/SUBSCRIBE DOMAIN
+PS消息域使用Topic作为消息的目的地。发布者发布消息到Topic，订阅者通过向Topic中进行注册，从Topic获取消息。任何发送到Topic中的消息都会自动发送给所有订阅者。
+订阅者和消息之间是多对一的关系。与P2P类似的地方在于，订阅者也可以通过同步(MessageConsumer.receive())或者异步地获取消息(通过MessageListener)。
+与P2P不同的是，队列会存储消息，而Topic在默认情况下不会存储消息，如果希望让Topic存储消息，那么则需要使用持久化订阅。如果使用持久化订阅，当订阅者与JMS Provider断开连接，
+那么JMS Provider将会负责为订阅者存储消息，一旦重新建立连接，持久化订阅者将会从JMS Provider接受到未过期的消息。持久化订阅允许订阅者在断开连接的情况下不丢失消息。
+
+> MESSAGE DURABILITY VS MESSAGE PERSISTENCE
+在JMS中，message durability 和 message persistence 是非常容易混淆的两个概念。尽管它们看起来非常相似，但是它们在语义还是存在不同，并且它么各自都自己的特定的目的。
+Message Durability 可以通过 publish/subscribe 的方式来实现。当客户端连接上 JMS Provider，它可以使用持久化订阅或者非持久化订阅。
+
+*Durable subscription : 当订阅者对Topic使用持久化订阅，其告诉 JMS Provider 当订阅者与 JMS Provider 断开连接时，JMS Provider 应该去保存订阅状态。  
+如果持久化订阅者与JMS Provider断开连接时，JMS Provider 将会存储所有的消息直到订阅者再一次与其建立连接或者订阅者显示地取消对主题的订阅。*
+
+*Nondurable subscription : 当订阅者对Topic使用非持久订阅，其告诉 JMS Provider 当订阅者与 JMS Provider 断开连接时，无需保存订阅状态。
+当客户端与 JMS Provider 断开连接，JMS Provider 在断开连接的这段时间不会为其保存任何消息*
+ 
+Message persistence 是一个与消息域无关的概念。Message persistence是一个服务质量属性，它被用于标识当JMS Provider发生宕机时，JMS 应用能否处理丢失的消息。这个属性
+的指定是通过消息消费者的setDeliveryMode方法来进行设置。参考javax.jms.DeliveryMode。
+
+#### Administered Object
+Administered Object 包含了特定的 JMS 提供者的配置信息，并且其应该被 JMS 管理者所创建。**Administrator Object 被用于JMS客户端。**
+它的作用是是向客户端屏蔽掉特定的 JMS 提供者的详细信息，并且提取了 JMS 提供者的管理任务。通常情况下，对于 Administrator Object 的查找是通过
+JNDI的方式来完成，但是这并不是强制要求的。在 JMS 规范中定义了两种类型的 Administrator Object:ConnectionFactory 和 Destination。
+
+##### ConnectionFactory
+JMS 客户端使用 ConnectionFactory 来创建与 JMS Provider 之间的连接。这个连接通常是客户端与 JMS Provider 之间的一个TCP连接，因此对于连接的创建，开销是巨大的。
+对于实现者来说，应该尽可能使用连接池来对连接进行管理。JMS 中的 Connection 与 JDBC中的 Connection 非常类似；JMS 客户端通过 Connection 来创建 javax.jms.Session对象
+来完成与 JMS Provider 之间的交互。
+
+##### Destination
+
+Topic/Queue
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 A copy of each message on a given sdestination is delivered to all topic subscribers using the pub/sub domain.
 
 
-#### Administered Object
 
-#### Destination
-
-Topic/Queue
 
 
 #### JMS message internals

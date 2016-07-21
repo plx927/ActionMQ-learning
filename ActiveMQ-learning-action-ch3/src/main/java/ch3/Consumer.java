@@ -7,8 +7,8 @@ import javax.jms.JMSException;
 import javax.jms.MessageConsumer;
 import javax.jms.Session;
 
+import ch3.portfolio.Listener;
 import org.apache.activemq.ActiveMQConnectionFactory;
-import org.apache.activemq.book.ch2.portfolio.Listener;
 
 public class Consumer {
 
