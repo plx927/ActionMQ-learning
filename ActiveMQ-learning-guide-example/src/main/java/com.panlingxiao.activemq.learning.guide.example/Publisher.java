@@ -87,11 +87,6 @@ public class Publisher {
         for( int i=1; i <= messages; i ++) {
             //通过Session来创建文本消息
             TextMessage msg = session.createTextMessage(body);
-
-            //JMS消息会自动将Destination设置到Message的Header中
-            System.out.println(msg.getJMSDestination());
-
-
             msg.setIntProperty("id", i);
             //使用消息的发送者来发送消息
             producer.send(msg);

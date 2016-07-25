@@ -15,13 +15,16 @@ import javax.jms.Session;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.command.ActiveMQMapMessage;
 
+/**
+ * JMS IN Action 书本案例
+ */
 public class Publisher {
 	
     private int MAX_DELTA_PERCENT = 1;
     private Map<String, Double> LAST_PRICES = new Hashtable<String, Double>();
     private static int count = 10;
     private static int total;
-    
+
     private static transient ConnectionFactory factory;
     private transient Connection connection;
     private transient Session session;
@@ -29,9 +32,15 @@ public class Publisher {
     
     public Publisher(String brokerURL) throws JMSException {
     	factory = new ActiveMQConnectionFactory(brokerURL);
+        //在默认情况下，ActiveMQ并没有提供任何的认证机制，因此创建连接无需进行任何的认证
     	connection = factory.createConnection();
+        //启动连接发送消息
         connection.start();
+
+        //设置Session是否为一个事务会话，通过后面的一个参数设置设置消费者在收到消息后如何对其进行确认
         session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+
+        //创建消息的消息生产者，可以指定消息生产者发送消息的目的地，也可以不指定
         producer = session.createProducer(null);
     }
     
@@ -108,7 +117,6 @@ public class Publisher {
 
     protected double mutatePrice(double price) {
         double percentChange = (2 * Math.random() * MAX_DELTA_PERCENT) - MAX_DELTA_PERCENT;
-
         return price * (100 + percentChange) / 100;
     }
 

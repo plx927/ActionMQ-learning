@@ -9,6 +9,9 @@ import javax.jms.Session;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 
+/**
+ * mvn exec:java -Dexec.mainClass=org.apache.activemq.book.ch3.portfolio.Consumer  -Dexec.args="CSCO ORCL"
+ */
 public class Consumer {
 
     private static String brokerURL = "tcp://localhost:61616";
@@ -31,6 +34,8 @@ public class Consumer {
     
     public static void main(String[] args) throws JMSException {
     	Consumer consumer = new Consumer();
+
+        //使用Session创建多个MessageConsumer
     	for (String stock : args) {
     		Destination destination = consumer.getSession().createTopic("STOCKS." + stock);
     		MessageConsumer messageConsumer = consumer.getSession().createConsumer(destination);
