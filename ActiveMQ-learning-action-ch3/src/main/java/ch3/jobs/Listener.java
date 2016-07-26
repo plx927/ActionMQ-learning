@@ -4,6 +4,9 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 
+/**
+ * mvn exec:java -Dexec.mainClass=org.apache.activemq.book.ch3.jobs.Consumer
+ */
 public class Listener implements MessageListener {
 
 	private String job;
