@@ -11,7 +11,6 @@ package com.panlingxiao.activemq.mail.producer;
  * @版本号: V1.0 .
  */
 public class MailParam {
-
 	/** 发件人 **/
 	private String from;
 	/** 收件人 **/
