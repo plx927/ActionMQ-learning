@@ -11,6 +11,9 @@ import javax.jms.Session;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 
+/**
+ * mvn exec:java -Dexec.mainClass=org.apache.activemq.book.ch3.jobs.Publisher
+ */
 public class Publisher {
 
     private static String brokerURL = "tcp://localhost:61616";

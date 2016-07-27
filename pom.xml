@@ -16,6 +16,8 @@
         <module>ActiveMQ-learning-mail-consumer</module>
         <module>ActiveMQ-learning-mail-producer</module>
         <module>ActiveMQ-learning-action-ch3</module>
+        <module>ActiveMQ-learning-action-ch4</module>
+        <module>ActiveMQ-learning-action-ch7</module>
     </modules>
 
     <properties>
