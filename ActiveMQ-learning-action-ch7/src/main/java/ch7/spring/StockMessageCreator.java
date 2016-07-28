@@ -1,17 +1,17 @@
 package ch7.spring;
 
-import java.util.Hashtable;
-import java.util.Map;
-
-import javax.jms.Destination;
-import javax.jms.JMSException;
-import javax.jms.MapMessage;
-import javax.jms.Message;
-import javax.jms.Session;
-
 import org.apache.activemq.command.ActiveMQMapMessage;
 import org.springframework.jms.core.MessageCreator;
 
+import javax.jms.*;
+import java.util.Hashtable;
+import java.util.Map;
+
+
+/**
+ * 在Spring中，通过实现MessageCreator接口来完成消息的创建
+ * 在完成消息的创建之后，我们通过JmsTemplate的send方法来完成消息的发送
+ */
 public class StockMessageCreator implements MessageCreator {
 
 	private int MAX_DELTA_PERCENT = 1;

@@ -30,7 +30,6 @@ public class Publisher {
 
         String user = env("ACTIVEMQ_USER", "admin");
         String password = env("ACTIVEMQ_PASSWORD", "password");
-        //String password = env("ACTIVEMQ_PASSWORD", "admin");
         String host = env("ACTIVEMQ_HOST", "localhost");
 
         int port = Integer.parseInt(env("ACTIVEMQ_PORT", "61616"));
@@ -46,7 +45,9 @@ public class Publisher {
             body += DATA.charAt(i%DATA.length());
         }
 
-        //创建JMS规范中所定义的ConncectionFactory
+        /*
+         * 创建JMS规范中所定义的ConnectionFactory,通过ConnectionFactory来创建客户端与JMS 提供商之间的连接
+         */
         ConnectionFactory factory = new ActiveMQConnectionFactory("tcp://" + host + ":" + port);
 
         /*
@@ -57,12 +58,11 @@ public class Publisher {
         Connection connection = factory.createConnection();
         //Connection connection = factory.createConnection(user, password);
 
-        //
+        //连接必须开启
         connection.start();
 
         /*
-         * JMS的Session是建立在Connnection之上的，需要通过Connection来创建Session，
-         * 并且设置Session为确认机制
+         * JMS的Session是建立在Connection之上的，需要通过Connection来创建Session，并且设置Session为确认机制
          */
         Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 

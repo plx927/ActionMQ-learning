@@ -1,61 +1,76 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-  <bean id="jmsConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
-    <property name="brokerURL" value="tcp://localhost:61616" />
-    <property name="userName" value="admin" />
-    <property name="password" value="password" />
-  </bean>
 
-  <bean id="pooledJmsConnectionFactory" class="org.apache.activemq.pool.PooledConnectionFactory"
-    destroy-method="stop">
-    <property name="connectionFactory" ref="jmsConnectionFactory" />
-  </bean>
+    <!--将ActiveMQ对JMS的ConnectionFactory配置成一个普通的Bean-->
+    <bean id="jmsConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+        <property name="brokerURL" value="tcp://localhost:61616"/>
+        <property name="userName" value="admin"/>
+        <property name="password" value="password"/>
+    </bean>
 
-  <bean id="cscoDest" class="org.apache.activemq.command.ActiveMQTopic">
-    <constructor-arg value="STOCKS.CSCO" />
-  </bean>
+    <!--ActiveMQ提供了基于池化的ConnectionFactory,它用于管理和维护 JMS Connection 和 Session
+        该连接工厂会对Connection、Session、Producer进行池化，但是不会对Consumer进行池化。
+    -->
+    <bean id="pooledJmsConnectionFactory" class="org.apache.activemq.pool.PooledConnectionFactory"
+          destroy-method="stop">
+        <property name="connectionFactory" ref="jmsConnectionFactory"/>
+    </bean>
 
-  <bean id="orclDest" class="org.apache.activemq.command.ActiveMQTopic">
-    <constructor-arg value="STOCKS.ORCL" />
-  </bean>
 
-  <!-- The message listener -->
-  <bean id="portfolioListener" class="org.apache.activemq.book.ch3.portfolio.Listener">
-  </bean>
+    <!--定义JMS Destination,这里定义的Destination 为 Topic，同时设置Topic的名字-->
+    <bean id="cscoDest" class="org.apache.activemq.command.ActiveMQTopic">
+        <constructor-arg value="STOCKS.CSCO"/>
+    </bean>
 
-  <!-- Spring DMLC -->
-  <bean id="cscoConsumer"
-    class="org.springframework.jms.listener.DefaultMessageListenerContainer">
-    <property name="connectionFactory" ref="jmsConnectionFactory" />
-    <property name="destination" ref="cscoDest" />
-    <property name="messageListener" ref="portfolioListener" />
-  </bean>
+    <bean id="orclDest" class="org.apache.activemq.command.ActiveMQTopic">
+        <constructor-arg value="STOCKS.ORCL"/>
+    </bean>
 
-  <!-- Spring DMLC -->
-  <bean id="orclConsumer"
-    class="org.springframework.jms.listener.DefaultMessageListenerContainer">
-    <property name="connectionFactory" ref="jmsConnectionFactory" />
-    <property name="destination" ref="orclDest" />
-    <property name="messageListener" ref="portfolioListener" />
-  </bean>
+    <!-- The message listener -->
+    <bean id="portfolioListener" class="ch7.listener.Listener">
+    </bean>
 
-  <!-- Spring JMS Template -->
-  <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
-    <property name="connectionFactory" ref="pooledJmsConnectionFactory" />
-  </bean>
+    <!-- Spring DMLC -->
+    <bean id="cscoConsumer"
+          class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <property name="connectionFactory" ref="jmsConnectionFactory"/>
+        <property name="destination" ref="cscoDest"/>
+        <property name="messageListener" ref="portfolioListener"/>
+    </bean>
 
-  <bean id="stockPublisher" class="ch7.spring.SpringPublisher">
-    <property name="template" ref="jmsTemplate" />
-    <property name="destinations">
-      <list>
-        <ref local="cscoDest" />
-        <ref local="orclDest" />
-      </list>
-    </property>
-  </bean>
+    <!--
+         Spring DMLC
+         在Spring中，对于消息的获取是通过 message listener container，它对我们自己所定义的Listener进行了封装
+         每一个Message Listener Container都需要一个 ConnectionFactory,destination、listener
+         注意到:这里使用的是非池化的连接工厂,这是因为在这个Demo中无需使用连接池。
+    -->
+    <bean id="orclConsumer"
+          class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <property name="connectionFactory" ref="jmsConnectionFactory"/>
+        <property name="destination" ref="orclDest"/>
+        <property name="messageListener" ref="portfolioListener"/>
+    </bean>
+
+    <!-- Spring JMS Template
+         JmsTemplate是Spring提供给用于发送消息的工具类
+     -->
+    <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+        <!--这里使用的是池化的连接工厂-->
+        <property name="connectionFactory" ref="pooledJmsConnectionFactory"/>
+    </bean>
+
+    <bean id="stockPublisher" class="ch7.spring.SpringPublisher">
+        <property name="template" ref="jmsTemplate"/>
+        <property name="destinations">
+            <list>
+                <ref local="cscoDest"/>
+                <ref local="orclDest"/>
+            </list>
+        </property>
+    </bean>
 
 </beans>
