@@ -1,5 +1,6 @@
 package ch7.spring;
 
+import ch7.producer.Publisher;
 import org.apache.xbean.spring.context.FileSystemXmlApplicationContext;
 
 

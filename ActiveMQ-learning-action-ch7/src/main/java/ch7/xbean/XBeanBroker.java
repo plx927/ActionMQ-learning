@@ -1,6 +1,6 @@
 package ch7.xbean;
 
-import org.apache.activemq.book.ch6.Publisher;
+import ch7.producer.Publisher;
 import org.apache.xbean.spring.context.FileSystemXmlApplicationContext;
 
 public class XBeanBroker {
