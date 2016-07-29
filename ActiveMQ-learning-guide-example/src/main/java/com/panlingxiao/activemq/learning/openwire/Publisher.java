@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.panlingxiao.activemq.learning.guide.example;
+package com.panlingxiao.activemq.learning.openwire;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.command.ActiveMQTopic;
@@ -80,7 +80,10 @@ public class Publisher {
         MessageProducer producer = session.createProducer(dest);
 
 
-        //设置消息生产者发送消息的发送模式，为非持久化方式
+        /*
+         * 设置消息生产者发送消息的发送模式，为非持久化方式
+         * JMS Provider 会尽可能地将消息进行发送,但是它不会将消息进行存储
+         */
         producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
 
 

@@ -1,14 +1,14 @@
 # ActiveMQ-learning
 个人对ActiveMQ消息中间件学习总结
 
-### ActiveMQ-learning-guide-example 为官方的example的例子
+## ActiveMQ-learning-guide-example 为官方的example的例子
 在${ActiveMQ_HOME}/examples/openwire/java
 
 
 ## JMS体系结构
 JMS 1.1 规范统一了两套不同的API，使用一套API来处理两个不同的消息域。
 
-### JMS Client
+#### JMS Client
 由传Java语言所编写的应用，用于发送和接受消息。
 
 ####  JMS Producer
@@ -68,6 +68,22 @@ JMS 客户端使用 ConnectionFactory 来创建与 JMS Provider 之间的连接�
 ##### Destination
 
 Topic/Queue
+
+
+
+## JMS 消息持久化
+JMS规范支持两种类型的消息发送:持久化和非持久化。当一个消息以持久化的方式发送时，那么 JMS Provider 必须将其记录存储，对于非持久化的方式，JMS Provider 必须尽可能地完成消息的发送，但是它不会去将消息进行记录存储。
+ActiveMQ支持对于这两种类型的消息发送都支持，并且可以配置来支持消息恢复。
+
+持久化消息使用的场景:被用于当你发送完消息到Broker之后，即使在这段时间内Consumer没有被运行，但是在之后依旧可以被消费。一旦消费者消费了消息并且对其进行了确认，那么Broker就会将消息进行删除。
+非持久化消息使用的场景:被用于发送通知或者是实时数据。当我们的应用对于性能的要求比较高并且可以允许消息的丢失的情况下，我们应该选择非持久化的消息发送。
+
+
+
+
+
+
+
 
 
 

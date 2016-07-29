@@ -15,9 +15,9 @@ package com.panlingxiao.activemq.learning.guide.example; /**
  * limitations under the License.
  */
 
-import java.util.ArrayList;
-
 import org.apache.activemq.util.IntrospectionSupport;
+
+import java.util.ArrayList;
 
 /**
  * Helper utility that can be used to set the properties on any object using
