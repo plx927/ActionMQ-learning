@@ -18,6 +18,8 @@
         <module>ActiveMQ-learning-action-ch3</module>
         <module>ActiveMQ-learning-action-ch4</module>
         <module>ActiveMQ-learning-action-ch7</module>
+        <module>ActiveMQ-learning-action-ch5</module>
+        <module>ActiveMQ-learning-action-ch6</module>
     </modules>
 
     <properties>
