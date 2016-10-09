@@ -20,6 +20,7 @@
         <module>ActiveMQ-learning-action-ch7</module>
         <module>ActiveMQ-learning-action-ch5</module>
         <module>ActiveMQ-learning-action-ch6</module>
+        <module>ActiveMQ-learning-action-ch14</module>
     </modules>
 
     <properties>

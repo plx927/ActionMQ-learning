@@ -2,6 +2,7 @@ package ch7.broker;
 
 import org.apache.activemq.broker.BrokerPlugin;
 import org.apache.activemq.broker.BrokerService;
+import org.apache.activemq.broker.jmx.ManagementContext;
 import org.apache.activemq.security.AuthenticationUser;
 import org.apache.activemq.security.SimpleAuthenticationPlugin;
 
@@ -63,6 +64,18 @@ public class Broker {
 
         //添加 Transport Connector
         broker.addConnector("tcp://localhost:61616");
+
+
+        //设置其是否启用对JMX的支持
+        broker.setUseJmx(true);
+
+        //修改Broker在监控中的名字
+        ManagementContext managementContext = new ManagementContext();
+        managementContext.setBrokerName("my-borker");
+        managementContext.setConnectorPort(2011);
+        broker.setManagementContext(managementContext);
+
+
 
         broker.start();
 
