@@ -73,8 +73,8 @@ public class Broker {
         ManagementContext managementContext = new ManagementContext();
         managementContext.setBrokerName("my-borker");
         managementContext.setConnectorPort(2011);
+        managementContext.setCreateConnector(true);
         broker.setManagementContext(managementContext);
-
 
 
         broker.start();
