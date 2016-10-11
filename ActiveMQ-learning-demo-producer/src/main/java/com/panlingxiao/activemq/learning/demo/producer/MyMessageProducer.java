@@ -15,11 +15,13 @@ public class MyMessageProducer {
 //        InitialContext initialContext = new InitialContext();
 //        Object connectionFactory = initialContext.lookup("jndi.properties");
 
-        ConnectionFactory connectionFactory = new ActiveMQConnectionFactory("tcp://172.16.1.86:61616");
-
+        ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory("publisher","password","tcp://172.16.1.86:61616");
+        connectionFactory.getProducerWindowSize();
         Connection connection = connectionFactory.createConnection();
 
         connection.start();
+
+        //设置事务后，必须commit才能将消费发送
         Session session = connection.createSession(true,Session.AUTO_ACKNOWLEDGE);
 
         //创建队列
@@ -27,13 +29,10 @@ public class MyMessageProducer {
         MessageProducer producer = session.createProducer(queue);
 
         for(int i = 0;i < 3;i++){
-            TextMessage textMessage = session.createTextMessage("hello :" + i);
+            TextMessage textMessage = session.createTextMessage("welcome :" + i);
             producer.send(textMessage);
         }
-        /*
-         * 如果Session设置了事务，
-         */
-        //session.commit();
+        session.commit();
         System.out.println("发送消息成功");
         session.close();
         connection.close();
