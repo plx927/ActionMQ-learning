@@ -77,7 +77,8 @@ public class Listener {
     }
 
     private static String env(String key, String defaultValue) {
-        String rc = System.getenv(key);
+       // String rc = System.getenv(key);
+        String rc = System.getProperty(key,defaultValue);
         if (rc == null)
             return defaultValue;
         return rc;
