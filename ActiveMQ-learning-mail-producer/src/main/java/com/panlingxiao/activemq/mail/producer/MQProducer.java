@@ -1,23 +1,31 @@
-package com.panlingxiao.activemq.mail.producer; /**
- * 基于Dubbo的分布式系统架构视频教程，吴水成，wu-sc@foxmail.com，学习交流QQ群：367211134 .
- */
+package com.panlingxiao.activemq.mail.producer;
 
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.Session;
-
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Service;
 
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.Session;
+
+/**
+
 import com.alibaba.fastjson.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.core.MessageCreator;
+import org.springframework.stereotype.Service;
+
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.Session;
 
 
 /**
  * 
  * @描述: MQ消息生产者 .
- * @作者: WuShuicheng .
  * @创建时间: 2015-3-17,下午10:55:30 .
  * @版本号: V1.0 .
  */

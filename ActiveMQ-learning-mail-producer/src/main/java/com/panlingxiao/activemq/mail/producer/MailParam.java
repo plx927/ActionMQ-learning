@@ -1,14 +1,8 @@
-/**
- * 基于Dubbo的分布式系统架构视频教程，吴水成，wu-sc@foxmail.com，学习交流QQ群：367211134 .
- */
 package com.panlingxiao.activemq.mail.producer;
 
 /**
  * 
  * @描述: 邮件参数封装类 .
- * @作者: WuShuicheng .
- * @创建时间: 2015-3-18,上午1:09:03 .
- * @版本号: V1.0 .
  */
 public class MailParam {
 	/** 发件人 **/
