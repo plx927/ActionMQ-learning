@@ -21,6 +21,7 @@
         <module>ActiveMQ-learning-action-ch5</module>
         <module>ActiveMQ-learning-action-ch6</module>
         <module>ActiveMQ-learning-action-ch14</module>
+        <module>ActiveMQ-learning-chat</module>
     </modules>
 
     <properties>
