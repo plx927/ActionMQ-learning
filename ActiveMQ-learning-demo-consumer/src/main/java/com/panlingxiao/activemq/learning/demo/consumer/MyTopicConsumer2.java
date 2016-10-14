@@ -19,6 +19,7 @@ public class MyTopicConsumer2 {
         while (true){
             MapMessage mapMessage = (MapMessage) consumer.receive();
             System.out.println(String.format("消费者2收到消费:id=%d,text=%s",mapMessage.getInt("id"),mapMessage.getString("text")));
+            mapMessage.acknowledge();
         }
     }
 }
